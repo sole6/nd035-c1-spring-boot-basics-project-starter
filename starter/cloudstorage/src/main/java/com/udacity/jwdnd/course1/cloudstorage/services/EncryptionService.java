@@ -5,16 +5,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 @Service
 public class EncryptionService {
     private Logger logger = LoggerFactory.getLogger(EncryptionService.class);
+    @PostConstruct
+    public void postConstruct() {
+        System.out.println("Creating EncryptionService bean");
+    }
 
     public String encryptValue(String data, String key) {
         byte[] encryptedValue = null;
@@ -32,6 +38,7 @@ public class EncryptionService {
         return Base64.getEncoder().encodeToString(encryptedValue);
     }
 
+
     public String decryptValue(String data, String key) {
         byte[] decryptedValue = null;
 
@@ -46,5 +53,13 @@ public class EncryptionService {
         }
 
         return new String(decryptedValue);
+    }
+
+    public String generateEncrKey (){
+        SecureRandom random = new SecureRandom();
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+        String encodedKey = Base64.getEncoder().encodeToString(key);
+        return encodedKey;
     }
 }
