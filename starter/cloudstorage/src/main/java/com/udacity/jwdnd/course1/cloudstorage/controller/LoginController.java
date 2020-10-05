@@ -46,8 +46,6 @@ public class LoginController {
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        System.out.println("loggedout");
-
         model.addAttribute("isLoggedOut", true);
         return "login";
     }

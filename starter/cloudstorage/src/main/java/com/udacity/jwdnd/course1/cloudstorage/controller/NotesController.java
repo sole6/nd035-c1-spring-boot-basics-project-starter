@@ -30,7 +30,6 @@ public class NotesController {
     @PostMapping("/notes/add")
     public String addNote(@ModelAttribute("noteForm") NoteForm noteForm, Model model) {
         modelInitializerService.initModels(model);
-        System.out.println(new StringBuilder().append("note id ").append(noteForm.getNoteId()).toString());
         if(noteForm.getNoteId()!=""){
             int up= editNote(noteForm);
             if(up>0){
@@ -85,7 +84,6 @@ public class NotesController {
         Note note = noteService.getNote(Integer.parseInt(noteForm.getNoteId()));
         note.setNotedescription(noteForm.getNotedescription());
         note.setNotetitle(noteForm.getNotetitle());
-        System.out.println(note.getNoteid());
         int rowUpdated = noteService.updateNote(note);
         return rowUpdated;
     }

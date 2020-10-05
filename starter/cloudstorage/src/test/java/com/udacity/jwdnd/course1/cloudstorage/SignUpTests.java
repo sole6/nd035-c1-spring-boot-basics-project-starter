@@ -10,17 +10,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
-
-import javax.xml.transform.Result;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.NoSuchElementException;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
@@ -131,24 +127,33 @@ public class SignUpTests {
         HomePage homePage = new HomePage(driver);
         homePage.saveCredential(driver,"google.com", "user", "pass");
 
-        WebElement marker2 = wait.until(webDriver -> webDriver.findElement(By.id("resultSuccess")));
-        ResultPage resultPage=new ResultPage(driver);
-        Assertions.assertTrue(resultPage.getResultSuccess().contains("success"));
-
         driver.get("http://localhost:" + this.port + "/home");
 
         marker = wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
-        homePage.editCredential(driver, "google.com", "user", "editedpass");
 
-        WebElement marker3 = wait.until(webDriver -> webDriver.findElement(By.id("resultSuccess")));
+        homePage.openCredentialsTab(driver);
+        Thread.sleep(2000);
+        Assertions.assertEquals("google.com", homePage.getCredentailUrlTdDriver(driver));
 
-        Thread.sleep(3_000);
-        Assertions.assertTrue(resultPage.getResultSuccess().contains("success"));
+        Assertions.assertNotEquals("pass", homePage.getCredentailPasswordTd(driver));
 
         driver.get("http://localhost:" + this.port + "/home");
-        homePage.deleteCredential(driver);
 
-        Assertions.assertTrue(resultPage.getResultSuccess().contains("Success"));
+         wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
+
+        homePage.openEditCredentialModel(driver);
+        homePage.editCredential(driver, "google.com", "user", "editedpass");
+
+        driver.get("http://localhost:" + this.port + "/home");
+        homePage.openCredentialsTab(driver);
+        Thread.sleep(6000);
+        Assertions.assertEquals("google.com", homePage.getCredentailUrlTdDriver(driver));
+        Assertions.assertNotEquals("editedpass", homePage.getCredentailPasswordTd(driver));
+        homePage.deleteCredential(driver);
+        driver.get("http://localhost:" + this.port + "/home");
+        homePage.openCredentialsTab(driver);
+        Assertions.assertThrows(NoSuchElementException.class, homePage::getCredentailUrlTd);
+
 
     }
 

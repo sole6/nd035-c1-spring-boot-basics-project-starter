@@ -152,12 +152,12 @@
                                 <th:block th:each="credential : ${listOfCredentials}">
                                     <tr>
                                         <td>
-                                            <a id="edit-credential-btn" type="submit" th:onclick="javascript: showEditCredentialModal([[${credential.credentialid}]],[[${credential.url}]], [[${credential.username}]], [[${credential.password}]])"  class="btn btn-success">Edit</a>
+                                            <button type="submit" id="edit-credential-btn" th:onclick="javascript: showEditCredentialModal([[${credential.credentialid}]],[[${credential.url}]], [[${credential.username}]], [[${credential.password}]])"  class="btn btn-success">Edit</button>
                                             <a id="delete-credential-btn"  th:href="@{|/credentials/delete?credentialid=${credential.credentialid}|}" class="btn btn-danger">Delete</a>
                                         </td>
-                                        <td th:text="${credential.url}"></td>
-                                        <td th:text="${credential.username}"></td>
-                                        <td th:text="${credential.password}"></td>
+                                        <td th:text="${credential.url}" id="credential-url-td"></td>
+                                        <td th:text="${credential.username}" id="credential-username-td"></td>
+                                        <td th:text="${credential.password}" id="credential-password-td"></td>
                                     </tr>
                                 </th:block>
                                 </tbody>
@@ -217,7 +217,8 @@
                 $('#noteModal').modal('show');
             }
             async function fetchDecodedPassword(credentialid) {
-              let response = await fetch(`http://localhost:8080/credentials/descreptCredential?credentialid=${credentialid}`);
+              let response = await fetch(`http://localhost:8080/credentials/descreptCredential?credentialid=${credentialid}`,
+               {mode: 'no-cors'});
 
               if (response.ok) {
                 const data = await response.json();
@@ -239,12 +240,13 @@
            async function showEditCredentialModal(credentialId, url, username, password) {
             console.log('showcreat');
             const test = await fetchDecodedPassword(credentialId);
-            console.log('await done');
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? test: '');
                 $('#credentialModal').modal('show');
+
+            console.log('await done');
             }
         </script>
     </body>

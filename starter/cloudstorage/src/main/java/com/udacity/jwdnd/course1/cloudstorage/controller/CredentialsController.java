@@ -63,6 +63,7 @@ public class CredentialsController {
     private int updateCredential (Credentials credentials) {
         return credentialsService.updateCredential(credentials);
     }
+
     @RequestMapping(value="/credentials/delete")
     public String deleteCredentials(@Param(value="credentialid") int credentialid, Model model) {
         modelInitializerService.initModels(model);
@@ -79,16 +80,14 @@ public class CredentialsController {
         return "result";
     }
 
+    @CrossOrigin
     @GetMapping(value="/credentials/descreptCredential")
     @ResponseBody
     public Credentials descreptCredential(@Param(value="credentialid") int credentialid) {
-       // modelInitializerService.initModels(model);
-        System.out.println(credentialid);
         Credentials credential = credentialsService.getCredential(credentialid);
         String decrepredPass = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
-        System.out.println("contr" + decrepredPass);
+
         credential.setPassword(decrepredPass);
-        //model.addAttribute("listOfCredentials", this.credentialsService.getCredentials());
         return credential;
     }
 

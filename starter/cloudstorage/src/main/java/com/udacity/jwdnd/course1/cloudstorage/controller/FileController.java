@@ -50,7 +50,7 @@ public class FileController {
             model.addAttribute("fileUploadErrMsg", "File is empty. Please upload a valid file");
             page = "home";
 
-        }else if(fileUploadService.isFileNameAvailable(file.getName())){
+        }else if(!fileUploadService.isFileNameAvailable(file.getOriginalFilename())){
             model.addAttribute("success", null);
             model.addAttribute("failure", "File with this name is already saved.");
             model.addAttribute("route", "/files");
@@ -78,7 +78,6 @@ public class FileController {
                 }
 
             } catch (IOException e) {
-                System.out.println(" e.printStackTrace()");
                 model.addAttribute("success", null );
                 model.addAttribute("failure", e.getMessage());
                 page = "result";

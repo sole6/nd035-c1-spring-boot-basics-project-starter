@@ -36,11 +36,8 @@ public class SignUpController {
         if (!userService.isUserNameAvailable(signUpForm.getUsername())) {
             signupError = "User name is already available!";
             signUpSuccess= false;
-            System.out.println(signupError);
-            System.out.println(signUpSuccess);
             model.addAttribute("signUpSuccess", signUpSuccess);
             model.addAttribute("signUpFailure", signupError);
-           // signUpForm.setSignUpFailure(signupError);
 
             signUpForm.setSignUpFailure(signupError);
             signUpForm.setSignUpSuccess(signUpSuccess);
