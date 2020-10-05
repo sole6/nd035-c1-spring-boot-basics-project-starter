@@ -22,7 +22,7 @@ import org.openqa.selenium.NoSuchElementException;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SignUpTests {
+public class HomeTests {
     String firstName = "firstname";
     String lastName = "lastName";
     String userName = "userName";
@@ -59,9 +59,6 @@ public class SignUpTests {
         signUpPage.signUp(firstName, lastName, userName, password);
         String signupsuccess = signUpPage.getsignUpSuccess();
         Assertions.assertEquals("You successfully signed up! Please continue to the login page.", signupsuccess);
-//        signUpPage.goToLogin();
-//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//        Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());
 
     }
 
