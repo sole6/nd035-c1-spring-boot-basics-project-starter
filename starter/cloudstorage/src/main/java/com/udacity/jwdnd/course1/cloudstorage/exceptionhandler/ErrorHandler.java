@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+//https://stackoverflow.com/questions/44282733/how-to-handle-multipart-exception
+// this is not working as advertized
 @EnableWebMvc
 @ControllerAdvice
 public class ErrorHandler {

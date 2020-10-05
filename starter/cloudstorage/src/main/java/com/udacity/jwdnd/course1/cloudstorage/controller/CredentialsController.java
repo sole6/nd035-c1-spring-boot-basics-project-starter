@@ -80,7 +80,8 @@ public class CredentialsController {
         return "result";
     }
 
-    @CrossOrigin
+
+    // udacity knowldge
     @GetMapping(value="/credentials/descreptCredential")
     @ResponseBody
     public Credentials descreptCredential(@Param(value="credentialid") int credentialid) {
