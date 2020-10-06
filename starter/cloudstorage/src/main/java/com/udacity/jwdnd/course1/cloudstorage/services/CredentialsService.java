@@ -5,8 +5,6 @@ import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.repository.CredentialsRepository;
-import com.udacity.jwdnd.course1.cloudstorage.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +16,6 @@ import java.util.List;
 
 @Service
 public class CredentialsService {
-    @Autowired
-    CredentialsRepository credentialsRepository;
 
     private final EncryptionService encryptionService;
     private final CredentialsMapper credentialsMapper;

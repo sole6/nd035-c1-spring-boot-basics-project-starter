@@ -21,6 +21,6 @@ public interface CredentialsMapper {
     @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid}")
     int deleteCredential(int credentialid);
 
-    @Update("UPDATE CREDENTIALS SET url=#{url}, key=#{key}, password =#{password} WHERE credentialid=#{credentialid}")
+    @Update("UPDATE CREDENTIALS SET url=#{url}, username=#{username}, password =#{password} WHERE credentialid=#{credentialid}")
     int updateCredential(Credentials credentials);
 }

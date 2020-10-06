@@ -28,6 +28,9 @@ public class LoginController {
         HttpSession session = request.getSession(false);
 
         model.addAttribute("loginErrorMessage", null);
+        if (model.getAttribute("signUpSuccess") != null) {
+            model.addAttribute("signUpSuccess");
+        }
         String errorMessage = null;
         if (session != null) {
             AuthenticationException ex = (AuthenticationException) session

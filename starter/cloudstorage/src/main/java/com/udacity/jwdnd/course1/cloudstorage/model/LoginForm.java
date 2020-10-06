@@ -8,6 +8,16 @@ public class LoginForm {
     private Boolean isValidUser;
 
     private Boolean isLoggedOut;
+
+    public Boolean getSignUpSuccess() {
+        return signUpSuccess;
+    }
+
+    public void setSignUpSuccess(Boolean signUpSuccess) {
+        this.signUpSuccess = signUpSuccess;
+    }
+
+    private Boolean signUpSuccess;
     public Boolean getLoggedOut() {
         return isLoggedOut;
     }

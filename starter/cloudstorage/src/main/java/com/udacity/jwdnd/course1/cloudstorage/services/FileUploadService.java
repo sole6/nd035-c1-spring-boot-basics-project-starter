@@ -5,8 +5,6 @@ import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.repository.FileRepository;
-import com.udacity.jwdnd.course1.cloudstorage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -17,8 +15,6 @@ import java.util.List;
 
 @Service
 public class FileUploadService {
-    @Autowired
-    FileRepository fileRepository;
 
     public final FileMapper fileMapper;
 

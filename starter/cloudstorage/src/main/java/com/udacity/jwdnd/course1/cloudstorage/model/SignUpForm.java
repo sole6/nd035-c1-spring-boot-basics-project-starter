@@ -44,15 +44,7 @@ public class SignUpForm {
         this.password = password;
     }
 
-    public Boolean getSignUpSuccess() {
-        return signUpSuccess;
-    }
 
-    public void setSignUpSuccess(Boolean signUpSuccess) {
-        this.signUpSuccess = signUpSuccess;
-    }
-
-    private Boolean signUpSuccess;
 
     public String getSignUpFailure() {
         return signUpFailure;
