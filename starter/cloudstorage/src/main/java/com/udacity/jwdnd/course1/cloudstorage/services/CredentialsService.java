@@ -49,7 +49,7 @@ public class CredentialsService {
     }
 
     private Credentials encreptyCredentials(Credentials credentials) {
-        String encodedKey = encryptionService.generateEncrKey();
+        String encodedKey = encryptionService.getSecureKey();
         String encryptedPassword = encryptionService.encryptValue(credentials.getPassword(), encodedKey);
         credentials.setKey(encodedKey);
         credentials.setPassword(encryptedPassword);

@@ -14,13 +14,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-public class FileController {
+public class FileController implements HandlerExceptionResolver {
     private final FileUploadService fileUploadService;
     private final UserService userService;
     private final ModelInitializerService modelInitializerService;
@@ -46,6 +51,7 @@ public class FileController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUser(auth.getName());
         String page = "home";
+        System.out.println(file.getSize());
 
         if (file.isEmpty()) {
             model.addAttribute("fileUploadErrMsg", "File is empty. Please upload a valid file");
@@ -55,6 +61,11 @@ public class FileController {
             model.addAttribute("success", null);
             model.addAttribute("failure", "File with this name is already saved.");
             model.addAttribute("route", "/files");
+            page = "result";
+        } else if (file.getSize() > 10485760) {
+            System.out.println("file sieze");
+            model.addAttribute("success", null );
+            model.addAttribute("failure", "file max ");
             page = "result";
         }
         else{
@@ -120,5 +131,14 @@ public class FileController {
             model.addAttribute("route", "/files");
         }
         return "result";
+    }
+
+    @Override
+    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+        ModelAndView modelAndView = new ModelAndView("fileError");
+        if (e instanceof MaxUploadSizeExceededException) {
+            modelAndView.getModel().put("message", "File size exceeds limit!");
+        }
+        return modelAndView;
     }
 }

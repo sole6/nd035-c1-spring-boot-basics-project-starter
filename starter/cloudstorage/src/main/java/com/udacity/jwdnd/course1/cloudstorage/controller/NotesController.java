@@ -30,8 +30,11 @@ public class NotesController {
     @PostMapping("/notes/add")
     public String addNote(@ModelAttribute("noteForm") NoteForm noteForm, Model model) {
         modelInitializerService.initModels(model);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Note note = new Note();
         if(noteForm.getNoteId()!=""){
-            int up= editNote(noteForm);
+
+            int up= editNote(noteForm, userService.getUser(auth.getName()).getUserid());
             if(up>0){
                 model.addAttribute("listOfNotes", this.noteService.getNotes());
                 model.addAttribute("success", "You have successfully updated " + noteForm.getNotetitle());
@@ -44,8 +47,6 @@ public class NotesController {
             }
         }
         if(noteForm.getNoteId()==""){
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            Note note = new Note();
             note.setNotetitle(noteForm.getNotetitle());
             note.setNotedescription(noteForm.getNotedescription());
             note.setUserid(userService.getUser(auth.getName()).getUserid());
@@ -80,10 +81,11 @@ public class NotesController {
         return "result";
     }
 
-    private int editNote(NoteForm noteForm) {
+    private int editNote(NoteForm noteForm, int userId) {
         Note note = noteService.getNote(Integer.parseInt(noteForm.getNoteId()));
         note.setNotedescription(noteForm.getNotedescription());
         note.setNotetitle(noteForm.getNotetitle());
+        note.setUserid(userId);
         int rowUpdated = noteService.updateNote(note);
         return rowUpdated;
     }

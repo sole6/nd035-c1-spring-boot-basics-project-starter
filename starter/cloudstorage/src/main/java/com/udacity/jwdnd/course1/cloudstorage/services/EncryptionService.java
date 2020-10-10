@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -19,7 +20,7 @@ public class EncryptionService {
     private Logger logger = LoggerFactory.getLogger(EncryptionService.class);
     @PostConstruct
     public void postConstruct() {
-        System.out.println("Creating EncryptionService bean");
+
     }
 
     public String encryptValue(String data, String key) {
@@ -41,7 +42,7 @@ public class EncryptionService {
 
     public String decryptValue(String data, String key) {
         byte[] decryptedValue = null;
-
+        System.out.println("decryptValue");
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
@@ -55,11 +56,18 @@ public class EncryptionService {
         return new String(decryptedValue);
     }
 
-    public String generateEncrKey (){
-        SecureRandom random = new SecureRandom();
-        byte[] key = new byte[16];
-        random.nextBytes(key);
-        String encodedKey = Base64.getEncoder().encodeToString(key);
-        return encodedKey;
+    public String getSecureKey() {
+        try {
+            KeyGenerator gen = KeyGenerator.getInstance("AES");
+            gen.init(128); /* 128-bit AES */
+            SecretKey secret = gen.generateKey();
+            byte[] binary = secret.getEncoded();
+            String key = String.format("%032X", new BigInteger(+1, binary));
+            return key;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 }

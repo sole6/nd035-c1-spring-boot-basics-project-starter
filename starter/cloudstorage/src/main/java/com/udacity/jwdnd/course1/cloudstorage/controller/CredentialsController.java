@@ -40,9 +40,10 @@ public class CredentialsController {
         credentials.setUserid(userService.getUser(auth.getName()).getUserid());
         credentials.setUsername(credentialsForm.getUsername());
         credentials.setPassword(credentialsForm.getPassword());
+        System.out.println(credentialsForm.getPassword());
         if(credentialsForm.getCredentialid() != "") {
             credentials.setCredentialid(Integer.parseInt(credentialsForm.getCredentialid()));
-            rowSaved = updateCredential(credentials);
+            rowSaved =  credentialsService.updateCredential(credentials);
             message = "updated credentails for ";
         }else{
             rowSaved=credentialsService.saveCredentials(credentials);
@@ -60,9 +61,6 @@ public class CredentialsController {
         return "result";
     }
 
-    private int updateCredential (Credentials credentials) {
-        return credentialsService.updateCredential(credentials);
-    }
 
     @RequestMapping(value="/credentials/delete")
     public String deleteCredentials(@Param(value="credentialid") int credentialid, Model model) {
@@ -85,6 +83,7 @@ public class CredentialsController {
     @GetMapping(value="/credentials/descreptCredential")
     @ResponseBody
     public Credentials descreptCredential(@Param(value="credentialid") int credentialid) {
+        System.out.println("descreptCredential");
         Credentials credential = credentialsService.getCredential(credentialid);
         String decrepredPass = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
 

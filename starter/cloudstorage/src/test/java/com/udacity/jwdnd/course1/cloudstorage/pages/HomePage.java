@@ -72,9 +72,13 @@ public class HomePage {
     public void saveNote(WebDriver driver, String title, String description) throws InterruptedException {
         JavascriptExecutor executor = (JavascriptExecutor) driver;
         executor.executeScript("arguments[0].click();", navNotesTab);
-        Thread.sleep(3_000);
+        WebDriverWait wait = new WebDriverWait(driver, 1000);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("add-note-btn")));
         addNoteBtn.click();
-        Thread.sleep(3_000);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("note-title")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("note-description")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("note-save-btn")));
         noteTitle.sendKeys(title);
         noteDescription.sendKeys(description);
         saveNoteBtn.click();
@@ -112,35 +116,17 @@ public class HomePage {
         credentialPassword.sendKeys(password);
         credentialSaveBtn.click();
     }
-    public void openEditCredentialModel(WebDriver driver) throws InterruptedException {
-        WebDriverWait wait = new WebDriverWait(driver, 1000);
-        openCredentialsTab(driver);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("edit-credential-btn")));
-        editCredentialBtn.click();
-
-        wait.until(webDriver -> webDriver.findElement(By.id("credentialModal")));
-        try {
-           // WebDriverWait wait2 = new WebDriverWait(driver, 2);
-            wait.until(ExpectedConditions.alertIsPresent());
-            Alert alert = driver.switchTo().alert();
-            System.out.println(driver.switchTo().alert().getText());
-            alert.accept();
-
-            wait.until(ExpectedConditions.elementToBeClickable(By.id("credential-url")));
-            wait.until(webDriver -> webDriver.findElement(By.id("credential-username")));
-            wait.until(webDriver -> webDriver.findElement(By.id("credential-password")));
-        } catch (Exception e) {
-            //exception handling
-        }
-    }
     public void editCredential(WebDriver driver, String url, String userName, String password) throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, 1000);
 
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("edit-credential-btn")));
+
+        editCredentialBtn.click();
+        Thread.sleep(5000);
         wait.until(ExpectedConditions.elementToBeClickable(By.id("credential-url"))).clear();
-        credentialUrl.sendKeys(url);
         wait.until(webDriver -> webDriver.findElement(By.id("credential-username"))).clear();
         wait.until(webDriver -> webDriver.findElement(By.id("credential-password"))).clear();
-
+        credentialUrl.sendKeys(url);
         credentialUsername.sendKeys(userName);
         credentialPassword.sendKeys(password);
         credentialSaveBtn.click();
@@ -148,7 +134,7 @@ public class HomePage {
 
     public void openCredentialsTab(WebDriver driver){
        WebDriverWait wait = new WebDriverWait(driver, 1000);
-        wait.until(webDriver -> webDriver.findElement(By.id("nav-credentials-tab")));
+       wait.until(webDriver -> webDriver.findElement(By.id("nav-credentials-tab")));
         navCredentialsTab.click();
     }
 
@@ -175,7 +161,7 @@ public class HomePage {
     public void deleteCredential(WebDriver driver) throws InterruptedException {
         JavascriptExecutor executor = (JavascriptExecutor) driver;
         executor.executeScript("arguments[0].click();", navCredentialsTab);
-        Thread.sleep(3_000);
+        //Thread.sleep(3_000);
         deleteCredentialBtn.click();
     }
 

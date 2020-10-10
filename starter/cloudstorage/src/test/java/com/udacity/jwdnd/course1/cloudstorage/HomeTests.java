@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +17,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.openqa.selenium.NoSuchElementException;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -58,13 +57,13 @@ public class HomeTests {
         SignUpPage signUpPage=new SignUpPage(driver);
         signUpPage.signUp(firstName, lastName, userName, password);
         String signupsuccess = signUpPage.getsignUpSuccess();
-        Assertions.assertEquals("You successfully signed up! Please continue to the login page.", signupsuccess);
+        Assertions.assertEquals("You successfully signed up!", signupsuccess);
 
     }
 
     @Test
     @Order(2)
-    public void logoutFromHOme() throws InterruptedException {
+    public void logoutFromHome() throws InterruptedException {
         driver.get("http://localhost:" + this.port + "/login");
        LoginPage loginPage = new LoginPage(driver);
        loginPage.login(userName, password);
@@ -115,35 +114,39 @@ public class HomeTests {
     @Test
     @Order(4)
     public void credentialsTests() throws InterruptedException {
+        String url = "google.com";
+        String urlusername = "user";
+        String urlpassword = "password";
+
         driver.get("http://localhost:" + this.port + "/login");
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(userName, password);
         WebDriverWait wait = new WebDriverWait(driver, 1000);
-        WebElement marker = wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
+        wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
         Assertions.assertEquals("http://localhost:" + this.port + "/home", driver.getCurrentUrl());
+
         HomePage homePage = new HomePage(driver);
-        homePage.saveCredential(driver,"google.com", "user", "pass");
+        homePage.saveCredential(driver,url, urlusername, urlpassword);
 
         driver.get("http://localhost:" + this.port + "/home");
 
-        marker = wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
+        wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
 
         homePage.openCredentialsTab(driver);
-        Thread.sleep(2000);
         Assertions.assertEquals("google.com", homePage.getCredentailUrlTdDriver(driver));
 
         Assertions.assertNotEquals("pass", homePage.getCredentailPasswordTd(driver));
 
         driver.get("http://localhost:" + this.port + "/home");
 
-         wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
+        wait.until(webDriver -> webDriver.findElement(By.id("home-page")));
+        homePage.openCredentialsTab(driver);
 
-        homePage.openEditCredentialModel(driver);
+        wait.until(webDriver -> webDriver.findElement(By.id("credentialModal")));
         homePage.editCredential(driver, "google.com", "user", "editedpass");
 
         driver.get("http://localhost:" + this.port + "/home");
         homePage.openCredentialsTab(driver);
-        Thread.sleep(6000);
         Assertions.assertEquals("google.com", homePage.getCredentailUrlTdDriver(driver));
         Assertions.assertNotEquals("editedpass", homePage.getCredentailPasswordTd(driver));
         homePage.deleteCredential(driver);
